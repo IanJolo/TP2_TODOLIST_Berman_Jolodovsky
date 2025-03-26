@@ -1,32 +1,73 @@
-let nuevaTarea= document.getElementById("nuevaTarea");
-let arrayTareas=[];
-let textoAMostrar;
+let nuevaTarea = document.getElementById("nuevaTarea");
+let mostrarTareas = document.getElementById("mostrarTareas");
+let mensaje = document.getElementById("mensaje");
+let arrayTareas = [];
+let contador = 0;
 
-function AgregarTarea(){
-    if(nuevaTarea.value
-        !==""){
-    funcHacerObjeto(nuevaTarea.value)   
-    nuevaTarea.value="";
-    textoAMostrar="";
-    document.getElementById("mostrarTareas").innerHTML=textoAMostrar;
-    arrayTareas.map(tareaObj=>{
-        `<div id="tareita">
-            <input type="checkbox" id="tarea${arrayTareas[i].id}">
-            <p> 
-                ${arrayTareas[i].titulo}
-            </p>
-        </div>`)
+function AgregarTarea() {
+    if (nuevaTarea.value.trim() === "") {
+        mensaje.innerText = "No podes agregar una tarea vacía";
+        mensaje.style.color = "red";
+        return;
+    }
+
+    mensaje.innerText = ""; 
+    crearObjetoTarea(nuevaTarea.value);
+    nuevaTarea.value = "";  
+    mostrarListaTareas();
+}
+
+function crearObjetoTarea(titulo) {
+    contador++;
+    let tareaObj = {
+        id: contador,
+        titulo: titulo,
+        fechaCreada: Date.now(),
+        fechaTachada: "",
+        estaTachada: false
+    };
+    arrayTareas.push(tareaObj);
+}
+
+function mostrarListaTareas() {
+    let contenidoHTML = ""; // Inicializamos la variable correctamente
+
+    arrayTareas.forEach(tarea => {
+        let chequeado = "";
+        let tachado = "";
+
+        if (tarea.estaTachada) {
+            chequeado = "checked";
+            tachado = "text-decoration: line-through;";
+        }
+
+        contenidoHTML += `
+            <div class="tarea">
+                <input type="checkbox" ${chequeado} onclick="marcarTarea(${tarea.id})">
+                <p style="${tachado}">${tarea.titulo}</p>
+                <button onclick="eliminarTarea(${tarea.id})">✖</button>
+            </div>
+        `;
+    });
+
+    mostrarTareas.innerHTML = contenidoHTML;
+}
+
+function marcarTarea(idTarea) {
+    for (let i = 0; i < arrayTareas.length; i++) {
+        if (arrayTareas[i].id === idTarea) {
+            arrayTareas[i].estaTachada = !arrayTareas[i].estaTachada;
+            arrayTareas[i].fechaTachada = arrayTareas[i].estaTachada ? new Date().toLocaleString() : "";
+            mostrarListaTareas(); 
+        }
     }
 }
-var contador=0
-const funcHacerObjeto = nuevaTarea =>{
-    contador++;
-    let tareaObj={
-        id:contador,
-        titulo: nuevaTarea,
-        fecha:Date.now(),
-        fechaTachada:"",
-        estaTachada:false
+
+function eliminarTarea(idTarea) {
+    for (let i = 0; i < arrayTareas.length; i++) {
+        if (arrayTareas[i].id === idTarea) {
+            arrayTareas.splice(i, 1); 
+            mostrarListaTareas(); 
+        }
     }
-    arrayTareas.push(tareaObj)
 }
