@@ -6,7 +6,7 @@ let contador = 0;
 
 function AgregarTarea() {
     if (nuevaTarea.value.trim() === "") {
-        mensaje.innerText = "No podes agregar una tarea vacía";
+        mensaje.innerHTML = "No podes agregar una tarea vacía";
         mensaje.style.color = "red";
         return;
     }
@@ -30,9 +30,9 @@ function crearObjetoTarea(titulo) {
 }
 
 function mostrarListaTareas() {
-    let contenidoHTML = ""; // Inicializamos la variable correctamente
+    let textoDiv = ""; 
 
-    arrayTareas.forEach(tarea => {
+        arrayTareas.forEach(tarea => {
         let chequeado = "";
         let tachado = "";
 
@@ -41,23 +41,22 @@ function mostrarListaTareas() {
             tachado = "text-decoration: line-through;";
         }
 
-        contenidoHTML += `
+        textoDiv += `
             <div class="tarea">
                 <input type="checkbox" ${chequeado} onclick="marcarTarea(${tarea.id})">
                 <p style="${tachado}">${tarea.titulo}</p>
-                <button onclick="eliminarTarea(${tarea.id})">✖</button>
+                <button class="botonEliminar" onclick="eliminarTarea(${tarea.id})">✖</button>
             </div>
         `;
     });
 
-    mostrarTareas.innerHTML = contenidoHTML;
+    mostrarTareas.innerHTML = textoDiv;
 }
 
 function marcarTarea(idTarea) {
     for (let i = 0; i < arrayTareas.length; i++) {
         if (arrayTareas[i].id === idTarea) {
             arrayTareas[i].estaTachada = !arrayTareas[i].estaTachada;
-            arrayTareas[i].fechaTachada = arrayTareas[i].estaTachada ? new Date().toLocaleString() : "";
             mostrarListaTareas(); 
         }
     }
@@ -66,8 +65,34 @@ function marcarTarea(idTarea) {
 function eliminarTarea(idTarea) {
     for (let i = 0; i < arrayTareas.length; i++) {
         if (arrayTareas[i].id === idTarea) {
-            arrayTareas.splice(i, 1); 
+            arrayTareas[i].fechaTachada=Date.now();
+            arrayTareas.splice(i, 1)
             mostrarListaTareas(); 
         }
     }
+}
+
+function mostrarTareaRapida(){
+    let mensaje = document.getElementById("mensaje");
+    let botonElimiar=document.getElementById("tareaMasRapida");
+    let tiempoMax=99999999;
+    let tareaMasRapida="";
+arrayTareas.map(obj=> {
+    let tiempoTardado=obj.fechaTachada-obj.fechaCreada;
+        
+    if(obj.estaTachada==true && tiempoTardado < tiempoMax){
+        tareaMasRapida=obj.titulo;
+        
+    }
+}
+)    
+   
+    if(tareaMasRapida!=="" ){
+    mensaje.innerHTML=`La tarea más rápida fue: ${tareaMasRapida}`
+    }else if(arrayTareas.length>0) {
+    mensaje.innerHTML=`No hay ninguna tarea finalizada`
+    }else{
+        mensaje.innerHTML=`No hay ninguna tarea pendiente`
+    }
+    mensaje.style.color="blue";
 }

@@ -5,15 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="images/icon.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+        </style>
     <title>Tp2-ToDoList</title>
 </head>
 <body>
-    <input autocomplete="off" type="text" id="nuevaTarea" placeholder="Ingrese una nueva tarea">
-    <button id="botonAgregar" onclick="AgregarTarea()">Agregar</button>
+    <div class="inputBotones">
+        <input autocomplete="off" type="text" id="nuevaTarea" placeholder="Ingrese una nueva tarea">
+        <div class="botones">
+            <button id="botonAgregar" onclick="AgregarTarea()">Agregar</button>
+            <button id="tareaMasRapida" onclick="mostrarTareaRapida()">Tarea más rápida</button>
+        </div>
+    </div>
     <div id="mensaje"></div>
     <div id="mostrarTareas"></div>
-
-
+    <div id="mensaje"></div>
     <script src="app.js"></script>
 </body>
 </html>
