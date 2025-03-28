@@ -96,3 +96,13 @@ arrayTareas.map(obj=> {
     }
     mensaje.style.color="blue";
 }
+function borrarTodo(){
+    if(arrayTareas.length>0){
+    arrayTareas=[];
+    mostrarListaTareas();
+    }else {
+        mensaje.innerHTML="No hay ninguna tarea";
+        mensaje.style.color="blue";
+
+    }
+}
